@@ -60,7 +60,7 @@ public class ProductController {
         		HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping (value = "/products", params = "name")
+    @GetMapping (value = "/productsByName", params = "name")
     public ResponseEntity<List<Product>> getAllProductsByName(@RequestParam ("name") String name){
         List<Product> products =  productService.getAllProductsByName(name);
         if(!products.isEmpty()) {

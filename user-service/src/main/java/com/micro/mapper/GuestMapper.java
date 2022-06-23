@@ -18,4 +18,6 @@ public interface GuestMapper {
     UserDto zabunnk(User sadi);
     User mal (UserDto userDto);
     UserDto neyse (User user );
+    UserDto ramo (User user);
+    UserDto aaaaa(User user);
 }

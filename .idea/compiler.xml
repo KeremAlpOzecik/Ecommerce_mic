@@ -17,6 +17,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="guest-service" target="11" />
       <module name="product-recommendation-service" target="11" />
     </bytecodeTargetLevel>
   </component>

@@ -36,7 +36,7 @@ public class OrderController {
     @PostMapping(value = "/order/{userId}/cart/{cartId}")
     public ResponseEntity<Order> saveOrder(
     		@PathVariable("userId") Long userId,
-    		@RequestParam("cartId") Long cartId,
+    		@PathVariable("cartId") Long cartId,
     		HttpServletRequest request){
     	
         List<Item> cart = cartService.getCartItems(cartId);

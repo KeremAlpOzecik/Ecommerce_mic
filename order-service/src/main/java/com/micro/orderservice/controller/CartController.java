@@ -13,7 +13,7 @@ public class CartController {
    private final CartService cartService;
 
    @GetMapping("/cart/items/{id}")
-   public ResponseEntity getCart(@RequestParam(value = "id") Long cartId) {
+   public ResponseEntity getCart(@PathVariable(value = "id") Long cartId) {
       return new ResponseEntity(cartService.getCartItems(cartId), HttpStatus.OK);
    }
 
@@ -35,6 +35,19 @@ public class CartController {
    public void deleteCart(@RequestParam(value = "productId") Long productId,@RequestParam(value = "cartId") Long cartId) {
       cartService.removeProductFromCart(productId, cartId);
    }
+
+   @GetMapping("/cart/decreaseQuantity")
+   public void decreaseQuantity(@RequestParam(value = "productId") Long productId, @RequestParam(value = "cartId") Long cartId,
+                                @RequestParam(value = "userId") Long userId) {
+      cartService.decreaseQuantity(productId, cartId, userId);
+   }
+
+   @GetMapping("/cart/increaseQuantity")
+   public void increase(@RequestParam(value = "productId") Long productId, @RequestParam(value = "cartId") Long cartId,
+                        @RequestParam(value = "userId") Long userId) {
+      cartService.increaseQuantity(productId, cartId, userId);
+   }
+
     
 
 

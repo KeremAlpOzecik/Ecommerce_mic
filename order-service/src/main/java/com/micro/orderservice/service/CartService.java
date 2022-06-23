@@ -36,29 +36,32 @@ public class CartService {
         item.setQuantity(quantity);
         Product product = productClient.getProductById(productId);
         item.setSubTotal(CartUtilities.getSubTotalForItem(product, quantity));
+        cart = cartRepository.save(cart);
         item.setCartId(cart.getId());
         Item save = itemRepository.save(item);
         cart.setTotal(OrderUtilities.countTotalPrice(itemRepository.findAllByCartId(cart.getId())));
         cart.setUserId(userId);
-            cart.setItemId(save.getId());
+        cart.setItemId(save.getId());
         cartRepository.save(cart);
 
 
     }
     public List<ShoppingCartItems> getCartProducts(Long id) {
         List<ShoppingCartItems> shoppingCartItems = new ArrayList<>();
-        Cart cart = getCart(id).get();
+//        Cart cart = getCart(id).get();
 
         List<Item> items = itemRepository.findAllByCartId(cartRepository.findByUserId(id).getId());
         for (Item item : items) {
             Product product = productClient.getProductById(item.getProductId());
-            shoppingCartItems.add(new ShoppingCartItems(product, item.getQuantity()));
+            shoppingCartItems.add(new ShoppingCartItems(product, item.getQuantity(), item.getCartId()));
         }
         return shoppingCartItems;
     }
+
     public Optional<Cart> getCart(Long cartId) {
         return cartRepository.findById(cartId);
     }
+
     public List<Item> getCartItems(Long cartId) {
         return itemRepository.findAllByCartId(cartId);
     }
@@ -78,6 +81,42 @@ public class CartService {
         cartRepository.deleteById(cartId);
     }
 
+    public void increaseQuantity(Long productId, Long cartId, Long userId) {
+        List<Item> items = itemRepository.findAllByCartId(cartId);
+        for (Item item : items) {
+            if (item.getProductId() == productId) {
+                item.setQuantity(item.getQuantity() + 1);
+                Product product = productClient.getProductById(productId);
+                item.setSubTotal(CartUtilities.getSubTotalForItem(product, item.getQuantity()));
+                Cart cart = cartRepository.findByUserId(userId);
+                cart.setTotal(OrderUtilities.countTotalPrice(itemRepository.findAllByCartId(cart.getId())));
+                itemRepository.save(item);
+                break;
+            }
+        }
+
+    }
+
+    public void decreaseQuantity(Long productId, Long cartId, Long userId) {
+        List<Item> items = itemRepository.findAllByCartId(cartId);
+        for (Item item : items) {
+            if (item.getProductId() == productId) {
+                if (item.getQuantity() > 0) {
+                    item.setQuantity(item.getQuantity() - 1);
+                    Product product = productClient.getProductById(productId);
+                    item.setSubTotal(CartUtilities.getSubTotalForItem(product, item.getQuantity()));
+                    Cart cart = cartRepository.findByUserId(userId);
+                    cart.setTotal(OrderUtilities.countTotalPrice(itemRepository.findAllByCartId(cart.getId())));
+                    itemRepository.save(item);
+                    break;
+                }
+                else {
+                    removeProductFromCart(productId, cartId);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 

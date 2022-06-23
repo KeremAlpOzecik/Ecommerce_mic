@@ -8,7 +8,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDto {
-	private int id;
+	private Long userId;
 	private String modeOfPayment;
 	private String status;
+	private Long cartId;
+	private String name;
+	private String phone;
+	private String address;
+	private String city;
+	private String country;
+	private String creditCard;
+	private String cvv;
+	private String expirationDate;
 }

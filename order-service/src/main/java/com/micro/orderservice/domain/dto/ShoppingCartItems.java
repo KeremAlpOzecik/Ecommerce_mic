@@ -11,6 +11,7 @@ public class ShoppingCartItems {
 
     private Product products;
     private int quantity;
+    private Long cartId;
 
 
 }
